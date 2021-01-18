@@ -11,6 +11,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xl"
         android:layout_weight="1"
         android:paddingLeft="@dimen/spacing_m"
         android:paddingRight="@dimen/spacing_m">
@@ -20,66 +21,78 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/spacing_l">
-
-                <ImageView
-                    android:id="@+id/register_pic_iV"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp" />
-
-                <Button
-                    android:id="@+id/register_pic_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:background="@drawable/button_r8"
-                    android:drawableTop="@drawable/camera_gray"
-                    android:fontFamily="@font/notosanskr_bold"
-                    android:paddingTop="31dp"
-                    android:paddingBottom="31dp"
-                    android:text="대표사진 등록하기"
-                    android:textColor="@color/sub_gray"
-                    android:textSize="12sp" />
-            </FrameLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/GroupName_edit"
+                <ImageView
+                    android:id="@+id/register_pic_iv"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="@dimen/spacing_m"
+                    android:layout_marginRight="@dimen/spacing_m"
+                    android:paddingTop="23dp"
+                    android:paddingBottom="25dp"
+                    android:paddingLeft="@dimen/spacing_l"
+                    android:paddingRight="@dimen/spacing_l"
+                    android:background="@drawable/button_r8"
+                    app:srcCompat="@drawable/camera_gray" />
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/gray"
-                    android:ems="10"
-                    android:fontFamily="@font/notosanskr_regular"
-                    android:hint="소모임 이름을 입력하세요."
-                    android:inputType="textPersonName"
-                    android:textColor="@color/sub_black"
-                    android:textColorHint="@color/gray"
-                    android:textSize="16sp"
-                    android:nextFocusDown="@id/info_edit"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_height="match_parent">
 
-                <Button
-                    android:id="@+id/check_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="34dp"
-                    android:background="@drawable/ic_blue_lined_button"
-                    android:fontFamily="@font/notosanskr_bold"
-                    android:text="중복 확인"
-                    android:textColor="@color/playviolet"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <EditText
+                        android:id="@+id/GroupName_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/gray"
+                        android:ems="10"
+                        android:fontFamily="@font/notosanskr_bold"
+                        android:hint="소모임 이름을 입력하세요."
+                        android:includeFontPadding="true"
+                        android:inputType="textPersonName"
+                        android:maxLines="1"
+                        android:nextFocusDown="@id/info_edit"
+                        android:paddingBottom="@dimen/spacing_xxs"
+                        android:singleLine="true"
+                        android:textColor="#33353d"
+                        android:textColorHint="@color/gray"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <Button
+                        android:id="@+id/check_btn"
+                        android:layout_width="63dp"
+                        android:layout_height="26dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/r4_stroke_line"
+                        android:fontFamily="@font/notosanskr_bold"
+                        android:includeFontPadding="false"
+                        android:text="중복 확인"
+                        android:textColor="#7c7f90"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/notosanskr_regular"
+                        android:includeFontPadding="false"
+                        android:text="소모임 명"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -108,28 +121,123 @@
                     android:hint="소모임 목적, 참여 인원, 활동 지역, 소모임 원칙, 소모임 활동 내용 등 소모임을 잘 소개할 수 있게 작성해주세요!\n(최대 300자)"
                     android:includeFontPadding="false"
                     android:maxLength="300"
+                    android:nextFocusDown="@id/member_spinner"
                     android:padding="@dimen/spacing_m"
+                    android:scrollbars="vertical"
                     android:textColor="@color/sub_black"
                     android:textColorHint="@color/sub_gray"
-                    android:textSize="12sp"
-                    android:scrollbars="vertical"
-                    android:nextFocusDown="@id/member_spinner"/>
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/text_num_tV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="@dimen/spacing_xs"
                     android:layout_marginRight="@dimen/spacing_xs"
                     android:layout_marginBottom="@dimen/spacing_xs"
                     android:fontFamily="@font/notosanskr_bold"
-                    android:includeFontPadding="false"
-                    android:paddingBottom="@dimen/spacing_xs"
                     android:text="300"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/sub_gray"
                     android:textSize="12sp" />
+
             </RelativeLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="13dp">
+
+                <Switch
+                    android:id="@+id/switch1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/notosanskr_bold"
+                    android:includeFontPadding="false"
+                    android:text="소모임원 모집"
+                    android:textColor="@color/sub_black"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/spacing_l"
+                android:background="#f5f6f9"/>
+
+            <LinearLayout
+                android:id="@+id/DateTime_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_l"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosanskr_regular"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/sub_gray"
+                    android:text="2021년 1월 14일 목요일" />
+
+                <TextView
+                    android:id="@+id/start_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:fontFamily="@font/notosanskr_regular"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/sub_gray"
+                    android:text="오후 01:00" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/DateTime_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_l"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosanskr_regular"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/sub_gray"
+                    android:text="2021년 1월 21일 목요일" />
+
+                <TextView
+                    android:id="@+id/end_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:fontFamily="@font/notosanskr_regular"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/sub_gray"
+                    android:text="오후 01:00" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/spacing_xl"
+                android:background="#f5f6f9"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -160,8 +268,8 @@
                         android:layout_height="48dp"
                         android:background="@drawable/button_r8"
                         android:entries="@array/member"
-                        android:paddingLeft="@dimen/spacing_m"
                         android:nextFocusDown="@id/location_edit"
+                        android:paddingLeft="@dimen/spacing_m"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
@@ -245,9 +353,9 @@
                     android:id="@+id/category_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:nextFocusDown="@id/sub_category_spinner"
                     android:background="@drawable/button_r8"
                     android:entries="@array/category"
+                    android:nextFocusDown="@id/sub_category_spinner"
                     android:paddingLeft="@dimen/spacing_m" />
 
                 <ImageView
@@ -280,9 +388,9 @@
                     android:id="@+id/sub_category_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:imeOptions="actionDone"
                     android:background="@drawable/button_r8"
                     android:entries="@array/category"
+                    android:imeOptions="actionDone"
                     android:paddingLeft="@dimen/spacing_m" />
 
                 <ImageView

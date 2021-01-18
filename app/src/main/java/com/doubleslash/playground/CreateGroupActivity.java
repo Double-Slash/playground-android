@@ -3,8 +3,10 @@ package com.doubleslash.playground;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,30 +17,22 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.doubleslash.playground.databinding.ActivityCreateGroupBinding;
 import com.doubleslash.playground.retrofit.RetrofitClient;
 
 public class CreateGroupActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    ActivityCreateGroupBinding binding;
     private RetrofitClient retrofitClient;
-    private Button register_pic_btn;
-    private EditText GroupName_edit;
-    private Button check_btn, search_btn, create_btn;//search_btn은 돋보기 버튼 -> 나중에 구현해야함
-    private EditText info_edit, location_edit;
-    private TextView text_num_tV;
-    private Spinner member_spinner, category_spinner, sub_category_spinner;
-    private ImageView register_pic_iV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_group);
+        binding = ActivityCreateGroupBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         initUI();
     }
@@ -61,22 +55,11 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
     }
 
     private void initUI() {
-        register_pic_btn = findViewById(R.id.register_pic_btn); //사진 받는 버튼
-        GroupName_edit = findViewById(R.id.GroupName_edit); //소모임 이름 입력받기
-        check_btn = findViewById(R.id.check_btn);   //중복 확인 버튼
-        info_edit = findViewById(R.id.info_edit);  //소모임 소개 입력받기
-        text_num_tV = findViewById(R.id.text_num_tV);   // 소개에서 입력받은 글자 수 실시간 출력하기
-        location_edit = findViewById(R.id.location_edit);   //위치 입력받기
-        create_btn = findViewById(R.id.create_btn); //생성하기
-        register_pic_iV = findViewById(R.id.register_pic_iV);
-
-        register_pic_btn.setOnClickListener(v -> {
-            register_pic_btn.setVisibility(View.INVISIBLE);
-            register_pic_iV.setVisibility(View.VISIBLE);
+        binding.registerPicIv.setOnClickListener(v -> { // 소모임 사진
             openGallery();
         });
 
-        GroupName_edit.addTextChangedListener(new TextWatcher() {
+        binding.GroupNameEdit.addTextChangedListener(new TextWatcher() {    // 소모임 이름
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -90,8 +73,8 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void afterTextChanged(Editable s) {
                 String text1 = s.toString();
-                String text2 = info_edit.getText().toString();
-                String text3 = location_edit.getText().toString();
+                String text2 = binding.infoEdit.getText().toString();
+                String text3 = binding.locationEdit.getText().toString();
                 if (text1.length() > 0 && text2.length() > 0 && text3.length() > 0){
                     onCreateBtn();
                 }
@@ -101,28 +84,28 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-        check_btn.setOnClickListener(v -> {
+        binding.checkBtn.setOnClickListener(v -> {
             //중복확인하기
         });
 
-        create_btn.setOnClickListener(v -> {
+        binding.createBtn.setOnClickListener(v -> {
             retrofitClient = RetrofitClient.getInstance();
 
-            String category = "category";
-            String city = location_edit.getText().toString();
-            String content = info_edit.getText().toString();
-            String maxMember = member_spinner.getSelectedItem().toString();
+            String category = binding.categorySpinner.getSelectedItem().toString();
+            String city = binding.locationEdit.getText().toString();
+            String content = binding.infoEdit.getText().toString();
+            String maxMember = binding.memberSpinner.getSelectedItem().toString();
             maxMember = maxMember.substring(0, maxMember.length() - 1);
             int maxMemberCount = Integer.parseInt(maxMember);
-            String name = GroupName_edit.getText().toString();
+            String name = binding.GroupNameEdit.getText().toString();
             String street = "거리";
             String token = "token";
 
             retrofitClient.post_group(category, city, content, maxMemberCount, name, street, token);
         });
 
-        bindEditTextScrolling(info_edit);
-        info_edit.addTextChangedListener(new TextWatcher() {    //소모임 소개
+        bindEditTextScrolling(binding.infoEdit);
+        binding.infoEdit.addTextChangedListener(new TextWatcher() {    //소모임 소개
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -133,15 +116,16 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
 
             }
 
+            @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
             @Override
             public void afterTextChanged(Editable s) {
                 findViewById(R.id.info_edit).setBackground(getResources().getDrawable(R.drawable.focus_box));
-                String input = info_edit.getText().toString();
-                text_num_tV.setText(input.length()+"/300"); //소모임 소개 실시간 글자수
+                String input = binding.infoEdit.getText().toString();
+                binding.textNumTV.setText(input.length()+"/300"); //소모임 소개 실시간 글자수
 
                 String text1 = s.toString();
-                String text2 = GroupName_edit.getText().toString();
-                String text3 = location_edit.getText().toString();
+                String text2 = binding.GroupNameEdit.getText().toString();
+                String text3 = binding.locationEdit.getText().toString();
                 if (text1.length() > 0 && text2.length() > 0 && text3.length() > 0){
                     onCreateBtn();
                 }
@@ -151,7 +135,7 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-        location_edit.addTextChangedListener(new TextWatcher() {    //위치 입력받기
+        binding.locationEdit.addTextChangedListener(new TextWatcher() {    //위치 입력받기
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -165,8 +149,8 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void afterTextChanged(Editable s) {
                 String text1 = s.toString();
-                String text2 = GroupName_edit.getText().toString();
-                String text3 = info_edit.getText().toString();
+                String text2 = binding.GroupNameEdit.getText().toString();
+                String text3 = binding.infoEdit.getText().toString();
                 if (text1.length() > 0 && text2.length() > 0 && text3.length() > 0){
                     onCreateBtn();
                 }
@@ -176,24 +160,44 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-        member_spinner = findViewById(R.id.member_spinner);
         ArrayAdapter memberAdapter = ArrayAdapter.createFromResource(this, R.array.member, android.R.layout.simple_spinner_dropdown_item);
         memberAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        member_spinner.setAdapter(memberAdapter);
-        member_spinner.setOnItemSelectedListener(this);
+        binding.memberSpinner.setAdapter(memberAdapter);
+        binding.memberSpinner.setOnItemSelectedListener(this);
 
-        category_spinner = findViewById(R.id.category_spinner);
         ArrayAdapter cateAdapter = ArrayAdapter.createFromResource(this, R.array.category, android.R.layout.simple_spinner_dropdown_item);
         cateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        category_spinner.setAdapter(cateAdapter);
-        category_spinner.setOnItemSelectedListener(this);
+        binding.categorySpinner.setAdapter(cateAdapter);
+        binding.categorySpinner.setOnItemSelectedListener(this);
 
-        sub_category_spinner = findViewById(R.id.sub_category_spinner);
         ArrayAdapter subAdapter = ArrayAdapter.createFromResource(this, R.array.category, android.R.layout.simple_spinner_dropdown_item);
         // 나중에 팀원들과 상의해서 세부 카테고리에 뭐가 들어갈지 정해야함, array도 만들어야함, 지금은 임시로 category 리스트로 넣었음
         subAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sub_category_spinner.setAdapter(subAdapter);
-        sub_category_spinner.setOnItemSelectedListener(this);
+        binding.subCategorySpinner.setAdapter(subAdapter);
+        binding.subCategorySpinner.setOnItemSelectedListener(this);
+
+
+        binding.switch1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {//On
+                binding.startDate.setTextColor(Color.parseColor("#33353d"));
+                binding.startTime.setTextColor(Color.parseColor("#33353d"));
+                binding.endDate.setTextColor(Color.parseColor("#33353d"));
+                binding.endTime.setTextColor(Color.parseColor("#33353d"));
+                binding.DateTimeStart.setOnClickListener(v -> {
+
+                });
+                binding.DateTimeEnd.setOnClickListener(v -> {
+
+                });
+            }
+            else {//Off
+                binding.startDate.setTextColor(getResources().getColor(R.color.sub_gray));
+                binding.startTime.setTextColor(getResources().getColor(R.color.sub_gray));
+                binding.endDate.setTextColor(getResources().getColor(R.color.sub_gray));
+                binding.endTime.setTextColor(getResources().getColor(R.color.sub_gray));
+            }
+        });
+
     }
 
 
@@ -201,13 +205,13 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()){
             case R.id.member_spinner:
-                Toast.makeText(CreateGroupActivity.this,"선택된 아이템 : "+member_spinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateGroupActivity.this,"선택된 아이템 : "+binding.memberSpinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
                 break;
             case R.id.category_spinner:
-                Toast.makeText(CreateGroupActivity.this,"선택된 아이템 : "+category_spinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateGroupActivity.this,"선택된 아이템 : "+binding.categorySpinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
                 break;
             case R.id.sub_category_spinner:
-                Toast.makeText(CreateGroupActivity.this,"선택된 아이템 : "+sub_category_spinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateGroupActivity.this,"선택된 아이템 : "+binding.subCategorySpinner.getItemAtPosition(position),Toast.LENGTH_SHORT).show();
                 break;
         }//Toast는 그저 확인용
     }//이 오버라이드 메소드에서 position은 몇번째 값이 클릭됐는지 알 수 있음
@@ -218,6 +222,7 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+    @SuppressLint("IntentReset")
     public void openGallery(){
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(android.provider.MediaStore.Images.Media.CONTENT_TYPE);
@@ -231,14 +236,13 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null && data.getData() != null) {
-            switch(requestCode) {
-                case 101:
-                    selectedImageUri = data.getData();
-                    Glide.with(getApplicationContext()).asBitmap().load(selectedImageUri).into(register_pic_iV);
-                    break;
+            if (requestCode == 101) {
+                selectedImageUri = data.getData();
+                Glide.with(getApplicationContext()).asBitmap().load(selectedImageUri).into(binding.registerPicIv);
             }
         }
     }
+    @SuppressLint("ClickableViewAccessibility")
     public static void bindEditTextScrolling(EditText view)
     {
         view.setOnTouchListener((v, event) -> {
@@ -259,15 +263,15 @@ public class CreateGroupActivity extends AppCompatActivity implements AdapterVie
 
     // 다음 버튼 활성화
     private void onCreateBtn() {
-        create_btn.setBackgroundResource(R.drawable.ic_button);
-        create_btn.setTextColor(getResources().getColor(R.color.white));
-        create_btn.setEnabled(true);
+        binding.createBtn.setBackgroundResource(R.drawable.ic_button);
+        binding.createBtn.setTextColor(getResources().getColor(R.color.white));
+        binding.createBtn.setEnabled(true);
     }
 
     // 다음 버튼 비활성화
     private void offCreateBtn() {
-        create_btn.setBackgroundResource(R.drawable.ic_disabled_button);
-        create_btn.setTextColor(getResources().getColor(R.color.sub_gray));
-        create_btn.setEnabled(false);
+        binding.createBtn.setBackgroundResource(R.drawable.ic_disabled_button);
+        binding.createBtn.setTextColor(getResources().getColor(R.color.sub_gray));
+        binding.createBtn.setEnabled(false);
     }
 }
